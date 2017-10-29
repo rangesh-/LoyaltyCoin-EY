@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html ng-app="mySimpleWalletDapp">
+<head>
+
+            <script type="text/javascript" src="./jquery.min.js"></script>
+    
+            <script type="text/javascript" src="./bootstrap.min.js"></script>
+            <script type="text/javascript" src="./web3.min.js"> </script>
+            <script type="text/javascript" src="./truffle-contract.min.js" ></script>
+            <script type="text/javascript" src="./contract.js" ></script>
+            <script type="text/javascript" src="./loyalty.js" ></script>
+             
+     
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+      
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+              integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+              <link rel="stylesheet" src="./css//jquery.stockquotes.min.css"/>
+
+              <style>
+              .content {
+    display:none;
+}
+              </style>
+
+              <script type="text/javascript">
+              $(document).ready(function(){
+                $('.nav li').click(function(){
+    var index = $(this).attr('data-index');
+    console.log(index);
+    $('.content').hide();
+    $('section[data-index="'+index+'"]').show();
+});
+GetBalance();
+              });
+              </script>
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">LoyaltyCoin</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li data-index="subscribe"><a href="#subscribe">Subscribe</a></li>
+        <li data-index="issue"><a href="#issue">Issue and Redeem</a></li>
+        <li data-index="exchange" ><a href="#exchange">Exchange</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+          <li><a  id="bal" href="#">Balance:</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<section class="content" data-index="subscribe">
+<div class="container">
+  <div class="row">
+    <div class="col-xs-6">
+
+        <form>
+            <div class="form-group">
+              <label for="vendorname">Vendor Name:</label>
+              <input type="text" class="form-control" id="vendorname">
+            </div>
+            <div class="form-group">
+              <label for="lcval">Points value:</label>
+              <input type="text" class="form-control" id="lcval">
+            </div>
+            <div class="form-group">
+                <label for="fval">Fiat value:</label>
+                <input type="text" class="form-control" id="fval">
+              </div>
+            <button type="button" class="btn btn-default" onclick="AddVendor()">Add Vendor</button>
+            
+          </form>
+          
+    </div>
+    <div class="col-xs-6">
+     <centre>
+       <b><i> 1 LoyaltyCoin Equivalent units listed below for different vendors</i></b>
+     </centre>
+    
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Vendor</th>
+                    <th>Points</th>
+                    <th>FiatValue</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Reliance Digital</td>
+                    <td>10</td>                    
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <td>LifeStyle</td>
+                    <td>5</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>JetAirways</td>
+                    <td>10</td>
+                    <td>100</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+</section>
+<section class="content" data-index="issue">
+ <div class="container">
+   <div class="row">
+<div>
+  <div>
+    <h4>
+  Issue LoyalytyCoins - Input Points and Select Vendor
+  <h4>
+  </div>
+    <form class="form-horizontal">
+        <div class="form-group form-group-sm col-sm-6">
+          <label for="issuepoints">Points</label>
+          <input type="text" class="form-control" id="issuepoints">
+        </div>
+        
+        <div class="form-group form-group-sm col-sm-6" style="margin-left: 20px">
+            <label for="issuepoints">Vendor</label>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Select Vendor
+                <span class="caret"></span></button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reliance</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">LifeStyle</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Jetairways</a></li>
+              </ul>
+          </div>
+        </div>
+        <button type="button" class="btn btn-default" onclick="IssueLoyaltyCoin()">Issue LoyaltyCoin</button>
+        
+      </form>
+<div id="issuediv"  class="text-success"></div>
+</div>
+
+<div>
+<div>
+  <h4>
+    Redeem LoyalytyCoins - Input LoyaltyCoins and Select Vendor
+  </h4>
+</div>
+    <form class="form-horizontal">
+        <div class="form-group form-group-sm col-sm-6">
+          <label for="loyalcoin">LoyaltyCoin</label>
+          <input type="text" class="form-control" id="loyalcoin">
+        </div>
+        
+        <div class="form-group form-group-sm col-sm-6" style="margin-left: 10px;">
+            <label for="issuepoints">Vendor</label>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Select Vendor
+                <span class="caret"></span></button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reliance</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">LifeStyle</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Jetairways</a></li>
+              </ul>
+          </div>
+        </div>
+        <button type="button" class="btn btn-default" onclick="RedeemLoyaltyCoin()">Redeem LoyaltyCoin</button>
+        
+      </form>
+  
+</div>
+<div id="redeemdiv" class="text-success"></div>
+   </div>
+ </div>
+</section>
+    
+<section class="content" data-index="exchange"> 
+    <div class="container">
+        <div class="row">
+     <div>
+       <div>
+         <h4>
+       Exchange LoyalytyCoins to Points - Exchange LoyaltyCoin to any of vendor points.
+       <h4>
+       </div>
+         <form class="form-horizontal">
+             <div class="form-group form-group-sm col-sm-6">
+               <label for="lccoin">LoyaltyCoin</label>
+               <input type="text" class="form-control" id="lccoin">
+             </div>
+             
+             <div class="form-group form-group-sm col-sm-6" style="margin-left: 20px">
+                 <label for="issuepoints">Vendor</label>
+                 <div class="dropdown">
+                     <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Select Vendor
+                     <span class="caret"></span></button>
+                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reliance</a></li>
+                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">LifeStyle</a></li>
+                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Jetairways</a></li>
+                   </ul>
+               </div>
+             </div>
+             <button type="button" class="btn btn-default" onclick="ExchangeLCCoin()">Exchange POINTS</button>
+             
+           </form>
+     
+     </div>
+     <div id="exchangediv" class="text-success"></div>
+     <div><hr/></div>
+     <div>
+     <div>
+       <h4>
+          Exchange LoyalytyCoins to Fiat - Exchange LoyaltyCoin to Fiat.
+       </h4>
+     </div>
+         <form class="form-horizontal">
+             <div class="form-group form-group-sm col-sm-6">
+               <label for="lcfiat">LoyaltyCoin</label>
+               <input type="text" class="form-control" id="lcfiat">
+             </div>
+             
+             <div class="form-group form-group-sm col-sm-6" style="margin-left: 10px;">
+                 <label for="issuepoints">Vendor</label>
+                 <div class="dropdown">
+                     <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Select Vendor
+                     <span class="caret"></span></button>
+                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Reliance</a></li>
+                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">LifeStyle</a></li>
+                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Jetairways</a></li>
+                   </ul>
+               </div>
+             </div>
+             <button type="button" class="btn btn-default" onclick="ExchangeLCFiat()">Exchange FIAT</button>
+             
+           </form>
+       
+     </div>
+     <div id="exchangefiatdiv" class="text-success"></div>
+        </div>
+      </div>
+</section>
+  
+</body>
+</html>
